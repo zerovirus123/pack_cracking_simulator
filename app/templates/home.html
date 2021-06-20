@@ -1,0 +1,25 @@
+{% extends "base.html" %} {% block content %}
+
+<h1>MTG Crack-a-Pack Simulator</h1>
+
+<body>
+  <div align="center">
+      <p>Simple crack-a-pack simulator for us peasants who can't afford cardboard crack.</p>
+  </div>
+
+  <div align="center">
+    <label>Select a Set: </label>
+    <select name="set" method="GET" action="/">
+      {% for set in sets %}
+          <option value="{{set}}" selected>{{set}}</option>
+      {% endfor %}
+    </select>
+    <div>
+      <button type="submit" class="btn btn-primary">Generate</button>
+    </div>
+  </div>
+
+  
+</body>
+
+{% endblock content %}
