@@ -12,14 +12,24 @@
     <select name="set" method="GET" action="/">
       {% for set in sets %}
           <option value="{{set}}" selected>{{set}}</option>
+          
       {% endfor %}
     </select>
     <div>
-      <button type="submit" class="btn btn-primary">Generate</button>
+      <form method='POST' action="">
+        <a class="btn btn-primary" id="generate-pack" href="{{ url_for('generate_pack') }}">Generate</a>
+      </form>
+      
+      <!-- <a class="btn btn-primary" id="generate-pack" onclick="generate-pack">Generate</a> -->
     </div>
   </div>
 
   
+  <div align="center" id="cardpool">
+  
+
+  </div>
+
 </body>
 
 {% endblock content %}

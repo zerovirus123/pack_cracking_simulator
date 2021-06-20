@@ -5,8 +5,10 @@ import os
 from app.errors.handlers import errors
 from app.home.views import home_blueprint
 
+app = Flask(__name__)
+
 def create_app():
-    app = Flask(__name__)
+    
 
     try:
         app.config.from_object(DevelopmentConfig if os.environ.get(
@@ -21,3 +23,9 @@ def create_app():
     app.register_blueprint(errors)
 
     return app
+
+@app.route('/generate-pack/', methods=['GET', 'POST'])
+def generate_pack(set):
+	print(set)
+
+    
