@@ -3,7 +3,7 @@ from app.config import TestingConfig, DevelopmentConfig, ProductionConfig
 import os
 # blueprints
 from app.errors.handlers import errors
-from app.home.routes import home
+from app.home.views import home_blueprint
 
 def create_app():
     app = Flask(__name__)
@@ -17,8 +17,7 @@ def create_app():
     from app.errors.handlers import errors
     from app.home.routes import home
 
+    app.register_blueprint(home_blueprint)
     app.register_blueprint(errors)
-    app.register_blueprint(home)
-
 
     return app
