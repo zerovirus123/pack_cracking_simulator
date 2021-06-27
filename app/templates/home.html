@@ -16,11 +16,11 @@
             <option value="{{set}}" selected>{{set}}</option>
         {% endfor %}
       </select>
+      <div>
+        <button class="btn btn-primary" href="{{ url_for('home.generate_pack') }}">Generate</button>
+      </div>
     </form>
 
-    <div>
-      <a class="btn btn-primary" id="generate-pack" href="{{ url_for('generate_pack') }}">Generate</a>
-    </div>
   </div>
 
   <div align="center" id="cardpool">

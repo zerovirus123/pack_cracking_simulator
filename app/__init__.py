@@ -23,11 +23,3 @@ def create_app():
 
     return app
 
-@app.route('/generate-pack/', methods=['GET', 'POST'])
-def generate_pack():
-	print(request.data)
-	selected_set = request.form["set-select"]
-	print("Selected set: " + str(selected_set))
-
-	return selected_set
-    

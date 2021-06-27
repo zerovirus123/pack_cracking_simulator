@@ -3,15 +3,18 @@ views = Flask(__name__)
 views.debug = True
 
 home_blueprint = Blueprint('home', __name__)
+app = Flask(__name__)
 
-selected_set = None
+sets = ['STX', 'KHM', 'ZNR', 'M21']
 
 @home_blueprint.route('/', methods=['GET'])
 def dropdown():
-    sets = ['STX', 'KHM', 'ZNR', 'M21']
+    
     return render_template('home.html', sets=sets)
 
-# @views.route('/generate-pack/<set>', methods=['GET', 'POST'])
-# def generate_pack():
-#     if request.method == 'POST':
-#         print(set)
+@home_blueprint.route('/home/generate-pack/', methods=['POST'])
+def generate_pack():
+	if request.method == "POST":
+		selected_set = request.form["set-select"]
+
+		return selected_set
