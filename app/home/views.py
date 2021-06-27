@@ -11,8 +11,7 @@ def dropdown():
     sets = ['STX', 'KHM', 'ZNR', 'M21']
     return render_template('home.html', sets=sets)
 
-@views.route('/generate-pack/<set>', methods=['GET', 'POST'])
-def generate_pack():
-
-    if request.method == 'POST':
-        print(set)
+# @views.route('/generate-pack/<set>', methods=['GET', 'POST'])
+# def generate_pack():
+#     if request.method == 'POST':
+#         print(set)

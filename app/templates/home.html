@@ -8,26 +8,22 @@
   </div>
 
   <div align="center">
-    <label>Select a Set: </label>
-    <select name="set" method="GET" action="/">
-      {% for set in sets %}
-          <option value="{{set}}" selected>{{set}}</option>
-          
-      {% endfor %}
-    </select>
+  
+    <form action="/generate-pack/" method="POST">
+      <label>Select a Set: </label>
+      <select name="set-select">
+        {% for set in sets %}
+            <option value="{{set}}" selected>{{set}}</option>
+        {% endfor %}
+      </select>
+    </form>
+
     <div>
-      <form method='POST' action="">
-        <a class="btn btn-primary" id="generate-pack" href="{{ url_for('generate_pack') }}">Generate</a>
-      </form>
-      
-      <!-- <a class="btn btn-primary" id="generate-pack" onclick="generate-pack">Generate</a> -->
+      <a class="btn btn-primary" id="generate-pack" href="{{ url_for('generate_pack') }}">Generate</a>
     </div>
   </div>
 
-  
   <div align="center" id="cardpool">
-  
-
   </div>
 
 </body>
