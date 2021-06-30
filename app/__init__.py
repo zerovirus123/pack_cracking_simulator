@@ -10,8 +10,7 @@ app = Flask(__name__)
 def create_app():
     
     try:
-        app.config.from_object(DevelopmentConfig if os.environ.get(
-            "PRODUCTION").lower() == 'true' else DevelopmentConfig)
+        app.config.from_object(DevelopmentConfig if os.environ.get("PRODUCTION").lower() == 'true' else DevelopmentConfig)
     except:
         app.config.from_object(DevelopmentConfig)
 
