@@ -15,6 +15,7 @@ class PackGenerator():
 		self.tokens = []
 		self.snow_sets = ["khm", "mh1", "c19", "fut", "csp", "ice"]
 		self.common_lands = {}
+		self.get_set_cards()
 
 	def reset_fields(self):
 		self.set_code = None
@@ -156,14 +157,15 @@ class PackGenerator():
 
 		for cards in card_jsons:
 			for card in cards["data"]:
-				if card["rarity"] == "common" and "land" not in card["type_line"].lower():
-					self.commons.append(card)
-				elif card["rarity"] == "uncommon":
-					self.uncommons.append(card)
-				elif card["rarity"] == "rare":
-					self.rares.append(card)
-				elif card["rarity"] == "mythic":
-					self.mythics.append(card)
+				if "promo_types" not in card:
+					if card["rarity"] == "common" and "land" not in card["type_line"].lower():
+						self.commons.append(card)
+					elif card["rarity"] == "uncommon":
+						self.uncommons.append(card)
+					elif card["rarity"] == "rare":
+						self.rares.append(card)
+					elif card["rarity"] == "mythic":
+						self.mythics.append(card)
 		
 		for card in token_cards:
 			self.tokens.append(card)
@@ -174,13 +176,14 @@ class PackGenerator():
 			else:
 				append_lands(card)
 
-	def generate_pack(self):
+	def get_set_cards(self):
 		set_json = self.set_request(self.set_code)
 		card_jsons = self.cards_request(set_json)
 		token_metadata = self.set_request("t" + self.set_code)
 		token_cards = self.cards_request(token_metadata)
 		lands = self.get_common_lands()
 		self.sort_cards(card_jsons, lands, token_cards)
-		selected_cards = self.select_cards()
 
+	def generate_pack(self):
+		selected_cards = self.select_cards()
 		return selected_cards
