@@ -11,8 +11,9 @@
     <form action='/get-set/' method="POST">
       <label>Select a Set: </label>
       <select name="set-select">
+		<option value="{{set_code}}" selected>Select A Set</option>
         {% for set in sets %}
-            <option value="{{set}}" selected='selected'>{{set}}</option>
+            <option value="{{set}}">{{set}}</option>
         {% endfor %}
       </select>
         <img src="{{ set_icon }}" witdh="32" height="32"></img>

@@ -24,8 +24,7 @@ def get_set():
 	if request.method == "POST":
 		image_uris = []
 		set_code = request.form["set-select"]
-		selected_set = set_code
-		req = scryfall_API_base + "/sets/" + selected_set
+		req = scryfall_API_base + "/sets/" + set_code
 		time.sleep(5/1000)
 		selected_set = requests.get(req)
 		set_json_str = selected_set.content.decode('utf8').replace("'", '"')
@@ -33,4 +32,4 @@ def get_set():
 		generator = PackGenerator(set_code)
 		pack = generator.generate_pack()
 		image_uris = generator.get_image_uris(pack)
-		return render_template("home.html", sets=sets, set_icon=set_json["icon_svg_uri"], image_uris=image_uris)
+		return render_template("home.html", sets=sets, set_icon=set_json["icon_svg_uri"], image_uris=image_uris, selected_set=set_code)
