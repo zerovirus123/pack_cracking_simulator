@@ -6,7 +6,7 @@ import random
 class PackGenerator():
 
 	def __init__(self, set_code):
-		self.set_code = set_code
+		self.set_code = set_code.lower()
 		self.scryfall_API_base = "https://api.scryfall.com"
 		self.mythics = []
 		self.rares = []
@@ -62,11 +62,11 @@ class PackGenerator():
 		cards = ujson.loads(cards_json_str)
 		return cards
 
-	def get_common_lands(self, set_code):
-		if set_code in self.snow_sets:
-			req_uri = self.scryfall_API_base + "/cards/search?q=s%3A{}+t%3Asnow+r%3Acommon+t%3Aland".format(set_code)
+	def get_common_lands(self):
+		if self.set_code in self.snow_sets:
+			req_uri = self.scryfall_API_base + "/cards/search?q=s%3A{}+t%3Asnow+r%3Acommon+t%3Aland".format(self.set_code)
 		else:
-			req_uri = self.scryfall_API_base + "/cards/search?q=s%3A{}+r%3Acommon+t%3Aland".format(set_code)
+			req_uri = self.scryfall_API_base + "/cards/search?q=s%3A{}+r%3Acommon+t%3Aland".format(self.set_code)
 
 		response = requests.get(req_uri)
 		json_str = response.content.decode('utf8')
@@ -169,18 +169,17 @@ class PackGenerator():
 			self.tokens.append(card)
 
 		for card in lands["data"]:
-			if self.set_code.lower() in self.snow_sets and "snow" in card["type_line"].lower():
+			if self.set_code in self.snow_sets and "snow" in card["type_line"].lower():
 				append_lands(card)
 			else:
 				append_lands(card)
 
-	def generate_pack(self, set_code):
-		self.set_code = set_code
-		set_json = self.set_request(set_code)
+	def generate_pack(self):
+		set_json = self.set_request(self.set_code)
 		card_jsons = self.cards_request(set_json)
-		token_metadata = self.set_request("t" + set_code)
+		token_metadata = self.set_request("t" + self.set_code)
 		token_cards = self.cards_request(token_metadata)
-		lands = self.get_common_lands(set_code)
+		lands = self.get_common_lands()
 		self.sort_cards(card_jsons, lands, token_cards)
 		selected_cards = self.select_cards()
 
