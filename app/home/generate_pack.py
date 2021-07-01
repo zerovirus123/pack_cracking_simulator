@@ -109,6 +109,18 @@ class PackGenerator():
 		print("Uncommons: {}\n".format(uncommons))
 		print("Commons: {}\n".format(commons))
 
+	def get_image_uris(self, pack):
+		uri_list = []
+		for card in pack:
+			if "image_uris" in card.keys():
+				uri = card["image_uris"]["normal"]
+				uri_list.append(uri)
+			elif "card_faces" in card.keys():
+				uri = card["card_faces"][0]["image_uris"]["normal"]
+				uri_list.append(uri)
+
+		return uri_list
+
 	def print_cards_in_set(self):
 		mythic_names = []
 		rare_names = []
@@ -137,7 +149,7 @@ class PackGenerator():
 	def sort_cards(self, card_jsons, lands, token_cards):
 		for cards in card_jsons:
 			for card in cards["data"]:
-				if card["rarity"] == "common":
+				if card["rarity"] == "common" and "land" not in card["type_line"].lower():
 					self.commons.append(card)
 				elif card["rarity"] == "uncommon":
 					self.uncommons.append(card)
