@@ -30,15 +30,7 @@ def get_set():
 		selected_set = requests.get(req)
 		set_json_str = selected_set.content.decode('utf8').replace("'", '"')
 		set_json = ujson.loads(set_json_str)
-		generator = PackGenerator()
+		generator = PackGenerator(set_code)
 		pack = generator.generate_pack(set_code)
-		# generator.print_pack(pack)
 		image_uris = generator.get_image_uris(pack)
 		return render_template("home.html", sets=sets, set_icon=set_json["icon_svg_uri"], image_uris=image_uris)
-
-@home_blueprint.route('/generate-pack/', methods=['GET', 'POST'])
-def generate_pack():
-	generator = PackGenerator()
-	pack = generator.generate_packs(set_code)
-	print(pack)
-	return pack

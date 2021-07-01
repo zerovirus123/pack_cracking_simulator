@@ -5,8 +5,8 @@ import random
 
 class PackGenerator():
 
-	def __init__(self):
-		self.set_code = None
+	def __init__(self, set_code):
+		self.set_code = set_code
 		self.scryfall_API_base = "https://api.scryfall.com"
 		self.mythics = []
 		self.rares = []
@@ -147,6 +147,13 @@ class PackGenerator():
 		print("Common Lands: {}\n".format(land_names))
 
 	def sort_cards(self, card_jsons, lands, token_cards):
+
+		def append_lands(card):
+			if card["name"] not in self.common_lands:
+				self.common_lands[card["name"]] = [card]
+			else:
+				self.common_lands[card["name"]].append(card)
+
 		for cards in card_jsons:
 			for card in cards["data"]:
 				if card["rarity"] == "common" and "land" not in card["type_line"].lower():
@@ -162,12 +169,13 @@ class PackGenerator():
 			self.tokens.append(card)
 
 		for card in lands["data"]:
-			if card["name"] not in self.common_lands:
-				self.common_lands[card["name"]] = [card]
+			if self.set_code.lower() in self.snow_sets and "snow" in card["type_line"].lower():
+				append_lands(card)
 			else:
-				self.common_lands[card["name"]].append(card)
+				append_lands(card)
 
 	def generate_pack(self, set_code):
+		self.set_code = set_code
 		set_json = self.set_request(set_code)
 		card_jsons = self.cards_request(set_json)
 		token_metadata = self.set_request("t" + set_code)
