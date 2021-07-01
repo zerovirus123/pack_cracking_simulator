@@ -66,7 +66,7 @@ class PackGenerator():
 		if set_code in self.snow_sets:
 			req_uri = self.scryfall_API_base + "/cards/search?q=s%3A{}+t%3Asnow+r%3Acommon+t%3Aland".format(set_code)
 		else:
-			req_uri = self.scryfall_API_base + "/cards/search?q=s%3A{}+t%3Abasic+r%3Acommon+t%3Aland".format(set_code)
+			req_uri = self.scryfall_API_base + "/cards/search?q=s%3A{}+r%3Acommon+t%3Aland".format(set_code)
 
 		response = requests.get(req_uri)
 		json_str = response.content.decode('utf8')
@@ -82,8 +82,8 @@ class PackGenerator():
 		else:
 			rare_card = random.choice(self.rares)
 
-		selected_uncommons = random.choices(self.uncommons, k=3)
-		selected_commons = random.choices(self.commons, k=10)
+		selected_uncommons = random.sample(self.uncommons, k=3)
+		selected_commons = random.sample(self.commons, k=10)
 		selected_lands = random.choice(list(self.common_lands.values()))
 
 		selected_cards.append(rare_card)
@@ -93,7 +93,23 @@ class PackGenerator():
 
 		return selected_cards
 
-	def print_cards(self):
+	def print_pack(self, pack):
+		rares = []
+		uncommons = []
+		commons = []
+		for card in pack:
+			if card["rarity"] == "rare" or card["rarity"] == "mythic":
+				rares.append(card["name"])
+			elif card["rarity"] == "uncommon":
+				uncommons.append(card["name"])
+			elif card["rarity"] == "common":
+				commons.append(card["name"])
+
+		print("Rares: {}\n".format(rares))
+		print("Uncommons: {}\n".format(uncommons))
+		print("Commons: {}\n".format(commons))
+
+	def print_cards_in_set(self):
 		mythic_names = []
 		rare_names = []
 		uncommon_names = []
@@ -129,8 +145,8 @@ class PackGenerator():
 					self.rares.append(card)
 				elif card["rarity"] == "mythic":
 					self.mythics.append(card)
-
-		for card in token_cards["data"]:
+		
+		for card in token_cards:
 			self.tokens.append(card)
 
 		for card in lands["data"]:
