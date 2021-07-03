@@ -1,14 +1,12 @@
 from flask import Flask, render_template, request, Blueprint
 import requests
 import time
-import ujson
 from .generate_pack import PackGenerator
 
 views = Flask(__name__)
 views.debug = True
 
 home_blueprint = Blueprint('home', __name__)
-app = Flask(__name__)
 
 sets = ['STX', 'KHM', 'ZNR', 'M21', 'ISD']
 set_code = None
@@ -26,9 +24,8 @@ def get_set():
 		set_code = request.form["set-select"]
 		req = scryfall_API_base + "/sets/" + set_code
 		time.sleep(5/1000)
-		selected_set = requests.get(req)
-		set_json_str = selected_set.content.decode('utf8').replace("'", '"')
-		set_json = ujson.loads(set_json_str)
+		response = requests.get(req)
+		set_json = response.json()
 		generator = PackGenerator(set_code)
 		pack = generator.generate_pack()
 		image_uris = generator.get_image_uris(pack)
