@@ -29,9 +29,8 @@ class PackGenerator():
 	def set_request(self, set_name):
 		req = self.scryfall_API_base + "/sets/" + set_name
 		time.sleep(5/1000)
-		selected_set = requests.get(req)
-		set_json_str = selected_set.content.decode('utf8').replace("'", '"')
-		set_json = ujson.loads(set_json_str)
+		response = requests.get(req)
+		set_json = response.json()
 		return set_json
 
 	def cards_request(self, set_json):
@@ -42,8 +41,7 @@ class PackGenerator():
 		while has_more:	
 			time.sleep(5/1000)
 			response = requests.get(cards_req)
-			cards_json_str = response.content.decode('utf8') 
-			cards_json = ujson.loads(cards_json_str)
+			cards_json = response.json() 
 			card_jsons.append(cards_json)
 
 			if not ("has_more" in cards_json):
@@ -59,8 +57,7 @@ class PackGenerator():
 		cards_req = set_json["search_uri"]
 		time.sleep(5/1000)
 		cards = requests.get(cards_req)
-		cards_json_str = cards.content.decode('utf8')
-		cards = ujson.loads(cards_json_str)
+		cards = cards.json()
 		return cards
 
 	def get_common_lands(self):
@@ -70,8 +67,7 @@ class PackGenerator():
 			req_uri = self.scryfall_API_base + "/cards/search?q=s%3A{}+r%3Acommon+t%3Aland".format(self.set_code)
 
 		response = requests.get(req_uri)
-		json_str = response.content.decode('utf8')
-		cards = ujson.loads(json_str)
+		cards = response.json()
 		return cards
 
 	def select_cards(self):
@@ -117,8 +113,12 @@ class PackGenerator():
 				uri = card["image_uris"]["normal"]
 				uri_list.append(uri)
 			elif "card_faces" in card.keys():
-				uri = card["card_faces"][0]["image_uris"]["normal"]
-				uri_list.append(uri)
+				uris = {"front_uri": "", "back_uri": ""}
+				uri_front = card["card_faces"][0]["image_uris"]["normal"]
+				uri_back = card["card_faces"][1]["image_uris"]["normal"]
+				uris["front_uri"] = uri_front
+				uris["back_uri"] = uri_back
+				uri_list.append(uris)
 
 		return uri_list
 
