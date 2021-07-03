@@ -5,7 +5,7 @@ import os
 from app.errors.handlers import errors
 from app.home.views import home_blueprint
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static')
 
 def create_app():
     
