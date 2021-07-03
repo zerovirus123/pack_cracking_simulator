@@ -11,7 +11,7 @@
     <form action='/get-set/' method="POST">
       <label>Select a Set: </label>
       <select name="set-select">
-		<option value="{{set_code}}" selected>Select A Set</option>
+		<option value="{{set_code}}" selected="{{ selected_set }}">Select A Set</option>
         {% for set in sets %}
             <option value="{{set}}">{{set}}</option>
         {% endfor %}
@@ -24,9 +24,34 @@
 	
   </div>
 
+  <!-- <script>
+      function flip(uri_dict)
+      {
+		console.log("called card flip")
+		let mdfc = document.getElementById("mdfc");
+		let src = mdfc.src;
+
+		if (src == uri_dict["front_uri"])
+		{
+			mdfc.src = uri_dict["back_uri"]
+		}
+		else
+		{
+			mdfc.src = uri_dict["front_uri"]
+		}
+      }
+  </script> -->
+  <script src="{{ url_for('static', filename='index.js') }} "></script>
+
   <div align="center" id="cardpool">
      {% for uri in image_uris %}
-	   <img src='{{uri}}'>
+       {% if uri is mapping %}
+       <a href>
+        <img id="mdfc" src='{{uri["front_uri"]}}' onclick="flip( this )">
+       </a>
+        {% else %}
+	       <img src='{{uri}}'>
+       {% endif %}
      {% endfor %}
   </div>
 
