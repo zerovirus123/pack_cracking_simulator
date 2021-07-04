@@ -1,6 +1,5 @@
 import requests
 import time
-import ujson
 import random
 
 class PackGenerator():
@@ -82,11 +81,13 @@ class PackGenerator():
 		selected_uncommons = random.sample(self.uncommons, k=3)
 		selected_commons = random.sample(self.commons, k=10)
 		selected_lands = random.choice(list(self.common_lands.values()))
+		selected_tokens = [random.choice(self.tokens)]
 
 		selected_cards.append(rare_card)
 		selected_cards.extend(selected_uncommons)
 		selected_cards.extend(selected_commons)
 		selected_cards.extend(selected_lands)
+		selected_cards.extend(selected_tokens)
 
 		return selected_cards
 
@@ -167,8 +168,9 @@ class PackGenerator():
 					elif card["rarity"] == "mythic":
 						self.mythics.append(card)
 		
-		for card in token_cards:
-			self.tokens.append(card)
+		for cards in token_cards:
+			for card in cards["data"]:
+				self.tokens.append(card)
 
 		for card in lands["data"]:
 			if self.set_code in self.snow_sets and "snow" in card["type_line"].lower():
