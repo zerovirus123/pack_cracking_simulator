@@ -11,7 +11,12 @@
     <form action='/get-set/' method="POST">
       <label>Select a Set: </label>
       <select name="set-select">
-		<option value="{{set_code}}" selected="{{ selected_set }}">Select A Set</option>
+        {% if selected_set is not defined %}
+           <option value="Select a Set" selected="Select a Set">Select A Set</option>
+        {% else %}
+           <option value="{{selected_set}}" selected="{{ selected_set }}">{{selected_set}}</option>
+        {% endif %}
+		
         {% for set in sets %}
             <option value="{{set}}">{{set}}</option>
         {% endfor %}
@@ -29,9 +34,7 @@
   <div align="center" id="cardpool">
      {% for uri in image_uris %}
        {% if uri is mapping %}
-       <a href>
-       </a>
-       <img id="mdfc" src='{{uri["front_uri"]}}' onclick="flip_card()">
+         <img id="mdfc" data-front='{{uri["front_uri"]}}' data-back='{{uri["back_uri"]}}' src='{{uri["front_uri"]}}' onclick="flip_card()">
         {% else %}
 	       <img src='{{uri}}'>
        {% endif %}
