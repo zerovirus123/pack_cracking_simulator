@@ -14,6 +14,7 @@ class PackGenerator():
 		self.tokens = []
 		self.snow_sets = ["khm", "mh1", "c19", "fut", "csp", "ice"]
 		self.common_lands = {}
+		self.request_session = requests.Session()
 		self.get_set_cards()
 
 	def reset_fields(self):
@@ -28,44 +29,44 @@ class PackGenerator():
 	def set_request(self, set_name):
 		req = self.scryfall_API_base + "/sets/" + set_name
 		time.sleep(5/1000)
-		response = requests.get(req)
+		response = self.request_session.get(req)
 		set_json = response.json()
 		return set_json
 
 	def cards_request(self, set_json):
 		has_more = True
 		card_jsons = []
-		cards_req = set_json["search_uri"]
+		req = set_json["search_uri"]
 
 		while has_more:	
 			time.sleep(5/1000)
-			response = requests.get(cards_req)
+			response = self.request_session.get(req)
 			cards_json = response.json() 
 			card_jsons.append(cards_json)
 
 			if not ("has_more" in cards_json):
 				has_more = False
 			elif "next_page" in cards_json:
-				cards_req = cards_json["next_page"]
+				req = cards_json["next_page"]
 			else:
 				break
 
 		return card_jsons
 
 	def tokens_request(self, set_json):
-		cards_req = set_json["search_uri"]
+		req = set_json["search_uri"]
 		time.sleep(5/1000)
-		cards = requests.get(cards_req)
-		cards = cards.json()
+		response = self.request_session.get(req)
+		cards = response.json()
 		return cards
 
 	def get_common_lands(self):
 		if self.set_code in self.snow_sets:
-			req_uri = self.scryfall_API_base + "/cards/search?q=s%3A{}+t%3Asnow+r%3Acommon+t%3Aland".format(self.set_code)
+			req = self.scryfall_API_base + "/cards/search?q=s%3A{}+t%3Asnow+r%3Acommon+t%3Aland".format(self.set_code)
 		else:
-			req_uri = self.scryfall_API_base + "/cards/search?q=s%3A{}+r%3Acommon+t%3Aland".format(self.set_code)
+			req = self.scryfall_API_base + "/cards/search?q=s%3A{}+r%3Acommon+t%3Aland".format(self.set_code)
 
-		response = requests.get(req_uri)
+		response = self.request_session.get(req)
 		cards = response.json()
 		return cards
 
