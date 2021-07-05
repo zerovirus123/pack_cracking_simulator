@@ -29,17 +29,12 @@
 	
   </div>
 
-  <script src="{{ url_for('static', filename='index.js') }} "></script>
-
   <div align="center" id="cardpool">
      {% for uri in image_uris %}
-       {% if uri is mapping %}
-         <img id="mdfc" data-front='{{uri["front_uri"]}}' data-back='{{uri["back_uri"]}}' src='{{uri["front_uri"]}}' onclick="flip_card()">
-        {% else %}
-	       <img src='{{uri}}'>
-       {% endif %}
+         <img onClick="flip_card('{{loop.index}}')" id="mdfc{{loop.index}}" data-front='{{uri["front_uri"]}}' data-back='{{uri.get("back_uri")}}' src='{{uri["front_uri"]}}' >
      {% endfor %}
   </div>
+  <script src="{{ url_for('static', filename='index.js') }} "></script>
 
 </body>
 

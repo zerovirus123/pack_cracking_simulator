@@ -111,16 +111,16 @@ class PackGenerator():
 	def get_image_uris(self, pack):
 		uri_list = []
 		for card in pack:
+			uris = {}
 			if "image_uris" in card.keys():
-				uri = card["image_uris"]["normal"]
-				uri_list.append(uri)
-			elif "card_faces" in card.keys():
-				uris = {"front_uri": "", "back_uri": ""}
-				uri_front = card["card_faces"][0]["image_uris"]["normal"]
-				uri_back = card["card_faces"][1]["image_uris"]["normal"]
+				uri_front = card["image_uris"]["normal"]
 				uris["front_uri"] = uri_front
+			elif "card_faces" in card.keys():
+				uri_front = card["card_faces"][0]["image_uris"]["normal"]
+				uris["front_uri"] = uri_front
+				uri_back = card["card_faces"][1]["image_uris"]["normal"]
 				uris["back_uri"] = uri_back
-				uri_list.append(uris)
+			uri_list.append(uris)
 
 		return uri_list
 
