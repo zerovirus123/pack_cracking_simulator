@@ -9,7 +9,6 @@ views.debug = True
 home_blueprint = Blueprint('home', __name__)
 
 sets = ['STX', 'KHM', 'ZNR', 'M21', 'ISD']
-set_code = None
 image_uris = []
 scryfall_API_base = "https://api.scryfall.com"
 
@@ -20,17 +19,13 @@ def dropdown():
 @home_blueprint.route('/get-set/', methods=['POST'])
 def get_set():
 	if request.method == "POST":
-		start = time.time()
 		image_uris = []
 		set_code = request.form["set-select"]
-		req = scryfall_API_base + "/sets/" + set_code
 		time.sleep(5/1000)
 		generator = PackGenerator(set_code)
 		pack = generator.generate_pack()
 		image_uris = generator.get_image_uris(pack)
 		set_json = generator.set_request(set_code)
-		end = time.time()
-		print("Time taken to generate pack: {}s".format(end - start))
 		return render_template("home.html", sets=sets, set_icon=set_json["icon_svg_uri"], image_uris=image_uris, selected_set=set_code)
 
 @home_blueprint.route('/get-set/flip_card', methods=['POST'])
