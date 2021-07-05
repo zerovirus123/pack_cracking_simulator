@@ -1,6 +1,6 @@
-import requests
 import time
 import random
+import requests_cache
 
 class PackGenerator():
 
@@ -14,7 +14,7 @@ class PackGenerator():
 		self.tokens = []
 		self.snow_sets = ["khm", "mh1", "c19", "fut", "csp", "ice"]
 		self.common_lands = {}
-		self.request_session = requests.Session()
+		self.request_session = requests_cache.CachedSession('demo_cache')
 		self.get_set_cards()
 
 	def reset_fields(self):
