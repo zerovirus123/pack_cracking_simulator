@@ -111,16 +111,16 @@ class PackGenerator():
 	def get_image_uris(self, pack):
 		uri_list = []
 		for card in pack:
+			double_face_uris = {}
 			if "image_uris" in card.keys():
 				uri = card["image_uris"]["normal"]
 				uri_list.append(uri)
 			elif "card_faces" in card.keys():
-				uris = {"front_uri": "", "back_uri": ""}
 				uri_front = card["card_faces"][0]["image_uris"]["normal"]
 				uri_back = card["card_faces"][1]["image_uris"]["normal"]
-				uris["front_uri"] = uri_front
-				uris["back_uri"] = uri_back
-				uri_list.append(uris)
+				double_face_uris["front_uri"] = uri_front
+				double_face_uris["back_uri"] = uri_back
+				uri_list.append(double_face_uris)
 
 		return uri_list
 
@@ -162,7 +162,7 @@ class PackGenerator():
 				if "promo_types" not in card:
 					if card["rarity"] == "common" and "land" not in card["type_line"].lower():
 						self.commons.append(card)
-					elif card["rarity"] == "uncommon":
+					elif card["rarity"] == "uncommon" and "card_faces" in card.keys():
 						self.uncommons.append(card)
 					elif card["rarity"] == "rare":
 						self.rares.append(card)
