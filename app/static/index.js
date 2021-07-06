@@ -1,20 +1,23 @@
 let cache = {};
 
-function flip_card()
+function flip_card(card_id)
 {
-	let mdfc = document.getElementById("mdfc");
+	let mdfc = document.getElementById("mdfc" + card_id);
 	let src = mdfc.src;
 	var uri_dict = {"front_uri": mdfc.getAttribute("data-front"), 
 	                "back_uri": mdfc.getAttribute("data-back")};
 
-	if (src == uri_dict["front_uri"])
-	{
-		mdfc.src = uri_dict["back_uri"]
+	if (uri_dict["back_uri"] != "None"){
+		if (src == uri_dict["front_uri"])
+		{
+			mdfc.src = uri_dict["back_uri"]
+		}
+		else
+		{
+			mdfc.src = uri_dict["front_uri"]
+		}
 	}
-	else
-	{
-		mdfc.src = uri_dict["front_uri"]
-	}
+
 }
 
 function select_set()
