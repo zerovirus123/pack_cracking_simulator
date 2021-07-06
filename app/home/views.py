@@ -26,10 +26,4 @@ def get_set():
 		pack = generator.generate_pack()
 		image_uris = generator.get_image_uris(pack)
 		set_json = generator.set_request(set_code)
-		return render_template("home.html", sets=sets, set_icon=set_json["icon_svg_uri"], image_uris=image_uris, selected_set=set_code)
-
-@home_blueprint.route('/get-set/flip_card', methods=['POST'])
-def flip_card():
-	print("Called flip card")
-
-views.jinja_env.globals.update(flip_card=flip_card)
+		return render_template("home.html", sets=sets, set_icon=set_json["icon_svg_uri"], image_uris=image_uris, selected_set="Select a Set")

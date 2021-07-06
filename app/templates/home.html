@@ -10,7 +10,7 @@
   <div align="center">
     <form action='/get-set/' method="POST">
       <label>Select a Set: </label>
-      <select name="set-select">
+      <select name="set-select" onchange="select_set()">
         {% if selected_set is not defined %}
            <option value="Select a Set" selected="Select a Set">Select A Set</option>
         {% else %}
@@ -21,20 +21,26 @@
             <option value="{{set}}">{{set}}</option>
         {% endfor %}
       </select>
-        <img src="{{ set_icon }}" witdh="32" height="32"></img>
-        <div name="generate-button">
-          <button type="submit" class="btn btn-primary">Generate</button>
+        <img id="set-icon" src="{{ set_icon }}" witdh="32" height="32"></img>
+        <div>
+		     <button id="generate-button" type="submit" class="btn btn-primary" disabled>Generate</button>
         </div>
     </form>
 	
   </div>
 
   <script src="{{ url_for('static', filename='index.js') }} "></script>
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='static/hover.css') }}">
 
   <div align="center" id="cardpool">
+	 {% set count = 0 %}
      {% for uri in image_uris %}
        {% if uri is mapping %}
-         <img id="mdfc" data-front='{{uri["front_uri"]}}' data-back='{{uri["back_uri"]}}' src='{{uri["front_uri"]}}' onclick="flip_card()">
+	      {% set front_uri = uri["front_uri"] %}
+		  {% set back_uri = uri["back_uri"] %}
+          <!-- <img id="mdfc" class="brightness" data-front='{{uri["front_uri"]}}' data-back='{{uri["back_uri"]}}' src='{{uri["front_uri"]}}' onclick="flip_card()"> -->
+		  <img id="mdfc" class="brightness" data-front='{{front_uri}}' data-back='{{back_uri}}' src='{{front_uri}}' onclick="flip_card()">
+		  {% set count = count + 1 %}
         {% else %}
 	       <img src='{{uri}}'>
        {% endif %}
