@@ -1,5 +1,13 @@
 let cache = {};
 
+let card = document.getElementById("card");
+card.addEventListener("click", flipCard);
+
+function flipCard()
+{
+	card.classList.toggle("flipCard");
+}
+
 function flip_card(card_id)
 {
 	let mdfc = document.getElementById("mdfc" + card_id);
@@ -17,7 +25,6 @@ function flip_card(card_id)
 			mdfc.src = uri_dict["front_uri"]
 		}
 	}
-
 }
 
 function select_set()

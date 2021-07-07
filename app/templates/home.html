@@ -33,16 +33,33 @@
   <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='static/hover.css') }}">
 
   <div align="center" id="cardpool">
-     {% for uri in image_uris %}
+     <!-- {% for uri in image_uris %}
        {% if uri is mapping %}
 	      {% set front_uri = uri["front_uri"] %}
 		    {% set back_uri = uri["back_uri"] %} 
-        <img id="mdfc{{loop.index}}" class="brightness" data-front='{{front_uri}}' data-back='{{back_uri}}' src='{{front_uri}}' onclick="flip_card('{{loop.index}}')">
+        <img id="mdfc{{loop.index}}" data-front='{{front_uri}}' data-back='{{back_uri}}' src='{{front_uri}}' onclick="flip_card('{{loop.index}}')">
         {% else %}
 	       <img src='{{uri}}'>
        {% endif %}
+     {% endfor %} -->
+     <div display="flex">
+     {% for uri in image_uris %}
+        {% if uri is mapping %}
+	      <div class="card" id="card">
+           <div class="front">
+            <img src='{{uri["front_uri"]}}'>
+           </div>
+           <div class="back" hidden>
+            <img src='{{uri["back_uri"]}}'>
+           </div>
+        </div>
+        {% else %}
+        <div class="card_display" display="flex">
+          <img src='{{uri}}'>
+        </div>
+       {% endif %}
      {% endfor %}
-  </div>
+    </div>
 
 </body>
 
