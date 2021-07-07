@@ -2,6 +2,7 @@ import time
 import random
 import requests_cache
 from datetime import timedelta
+from urllib.error import HTTPError
 
 class PackGenerator():
 
@@ -30,36 +31,38 @@ class PackGenerator():
 	def set_request(self, set_name):
 		req = self.scryfall_API_base + "/sets/" + set_name
 		time.sleep(5/1000)
-		response = self.request_session.get(req)
+		try:
+			response = self.request_session.get(req)
+		except HTTPError as err:
+			if err.code == 404:
+				print("404: {} is not a valid URI".format(req))
 		set_json = response.json()
 		return set_json
 
 	def cards_request(self, set_json):
 		has_more = True
 		card_jsons = []
-		req = set_json["search_uri"]
 
-		while has_more:	
-			time.sleep(5/1000)
-			response = self.request_session.get(req)
-			cards_json = response.json() 
-			card_jsons.append(cards_json)
+		if "search_uri" in set_json.keys():
+			req = set_json["search_uri"]
+			try:
+				while has_more:	
+					time.sleep(5/1000)
+					response = self.request_session.get(req)
+					cards_json = response.json() 
+					card_jsons.append(cards_json)
 
-			if not ("has_more" in cards_json):
-				has_more = False
-			elif "next_page" in cards_json:
-				req = cards_json["next_page"]
-			else:
-				break
-
+					if not ("has_more" in cards_json):
+						has_more = False
+					elif "next_page" in cards_json:
+						req = cards_json["next_page"]
+					else:
+						break
+			except HTTPError as err:
+				if err.code == 404:
+					print("404: {} is not a valid URI".format(req))
+			
 		return card_jsons
-
-	def tokens_request(self, set_json):
-		req = set_json["search_uri"]
-		time.sleep(5/1000)
-		response = self.request_session.get(req)
-		cards = response.json()
-		return cards
 
 	def get_common_lands(self):
 		if self.set_code in self.snow_sets:
@@ -67,7 +70,12 @@ class PackGenerator():
 		else:
 			req = self.scryfall_API_base + "/cards/search?q=s%3A{}+r%3Acommon+t%3Aland".format(self.set_code)
 
-		response = self.request_session.get(req)
+		try:
+			response = self.request_session.get(req)
+		except HTTPError as err:
+			if err.code == 404:
+				print("404: {} is not a valid URI".format(req))
+
 		cards = response.json()
 		return cards
 
@@ -75,21 +83,28 @@ class PackGenerator():
 		selected_cards = []
 		isMythic = 7
 
-		if isMythic == random.choice([0,1,2,3,4,5,6,7]):
-			rare_card = random.choice(self.mythics)
+		if len(self.mythics) > 0:
+			if isMythic == random.choice([0,1,2,3,4,5,6,7]):
+				rare_card = random.choice(self.mythics)
+			else:
+				rare_card = random.choice(self.rares)
 		else:
 			rare_card = random.choice(self.rares)
 
 		selected_uncommons = random.sample(self.uncommons, k=3)
 		selected_commons = random.sample(self.commons, k=10)
 		selected_lands = random.choice(list(self.common_lands.values()))
-		selected_tokens = [random.choice(self.tokens)]
+
+		if len(self.tokens) > 0:
+			selected_tokens = [random.choice(self.tokens)]
 
 		selected_cards.append(rare_card)
 		selected_cards.extend(selected_uncommons)
 		selected_cards.extend(selected_commons)
 		selected_cards.extend(selected_lands)
-		selected_cards.extend(selected_tokens)
+
+		if len(self.tokens) > 0:
+			selected_cards.extend(selected_tokens)
 
 		return selected_cards
 
