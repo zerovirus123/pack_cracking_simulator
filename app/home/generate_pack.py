@@ -162,7 +162,7 @@ class PackGenerator():
 				if "promo_types" not in card:
 					if card["rarity"] == "common" and "land" not in card["type_line"].lower():
 						self.commons.append(card)
-					elif card["rarity"] == "uncommon" and "card_faces" in card.keys():
+					elif card["rarity"] == "uncommon":
 						self.uncommons.append(card)
 					elif card["rarity"] == "rare":
 						self.rares.append(card)
