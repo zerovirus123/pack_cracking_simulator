@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask
 from app.config import TestingConfig, DevelopmentConfig, ProductionConfig
 import os
 # blueprints
@@ -21,4 +21,3 @@ def create_app():
     app.register_blueprint(errors)
 
     return app
-
