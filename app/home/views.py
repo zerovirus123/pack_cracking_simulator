@@ -4,19 +4,17 @@ import time
 from .generate_pack import PackGenerator
 from datetime import timedelta
 from urllib.error import HTTPError
+from .set_info import sets, sets_to_ignore
 
 views = Flask(__name__)
 views.debug = True
 
 home_blueprint = Blueprint('home', __name__)
 
-sets = []
-sets_to_ignore = ["fmb1"]
 scryfall_API_base = "https://api.scryfall.com"
 
 @home_blueprint.route('/', methods=['GET'])
 def dropdown():
-	global sets, sets_to_ignore
 	request_session = requests_cache.CachedSession('session_cache', expire_after=timedelta(days=1))
 	req = scryfall_API_base + "/sets/"
 	time.sleep(5/1000)
