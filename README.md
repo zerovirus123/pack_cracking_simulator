@@ -13,6 +13,6 @@ Toy project that allows the user to generate a booster pack from the selected Ma
 
 3.) Activate environment by typing source venv/bin/activate.
 
-4.) Install all the requirements.
+4.) Install all the requirements by typing pip install -r requirements.txt.
 
 5.) Run the project by typing python run.py. Go to https://localhost:5000, or click on the URL in the terminal output.
